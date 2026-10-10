@@ -1,198 +1,26 @@
-/* SSF Morocco RP — client-side demo + optional Supabase integration.
-   Never put a Supabase service_role key in this file. */
-const SUPABASE_URL = ""; // Optional: https://YOUR-PROJECT.supabase.co
-const SUPABASE_ANON_KEY = ""; // Optional: public anon/publishable key only
-const TABLE_NAME = "applications";
-
-const translations = {
-  ar: {
-    navHome:"الرئيسية",navApply:"التقديم",navExam:"الامتحان",navRules:"القوانين",navAdmin:"الإدارة",
-    eyebrow:"بوابة التوظيف الرسمية • الموسم مفتوح",heroTitle:"الانضباط يبدأ<br><span>من هنا.</span>",
-    heroLead:"انضم إلى SSF Morocco RP، وأثبت جاهزيتك عبر طلب الانضمام والاختبار المعرفي. الالتزام، الاحترام والعمل الجماعي أساس مهمتنا.",
-    applyNow:"قدّم طلبك الآن <span>↙</span>",readRules:"اقرأ القوانين",statOne:"طلب منظم",statTwo:"اختبار تلقائي",statThree:"بوابة إلكترونية",heroFooter:"الجدية • النزاهة • المسؤولية",
-    overviewTitle:"بوابتك نحو <span>الفرقة</span>",overviewText:"كل خطوة واضحة: اقرأ الشروط، أرسل المعلومات المطلوبة، ثم اجتز الاختبار.",
-    featureOneTitle:"تقديم منظم",featureOneText:"املأ الاستمارة بمعلومات صحيحة وواضحة حتى تتمكن الإدارة من مراجعة طلبك.",learnMore:"ابدأ التقديم ↙",
-    featureTwoTitle:"اختبار QCM",featureTwoText:"أجب عن أسئلة الاختيار المتعدد واحصل على نتيجتك مباشرة بعد الإرسال.",takeExam:"ابدأ الاختبار ↙",
-    featureThreeTitle:"قوانين واضحة",featureThreeText:"تعرف على قواعد الاحترام، اللعب النظيف، والالتزام داخل السيرفر.",viewRules:"عرض القوانين ↙",
-    applicationTitle:"استمارة <span>الانضمام</span>",applicationIntro:"أدخل معلوماتك بدقة. الحقول التي تحمل علامة * مطلوبة.",formTitle:"طلب الانتساب الرسمي",formSub:"يرجى احترام القوانين وتقديم معلومات صحيحة.",
-    fullName:"الاسم داخل السيرفر *",discordName:"اسم Discord *",age:"العمر *",timezone:"التوقيت / أوقات النشاط *",experience:"خبرتك في RP *",motivation:"لماذا تريد الانضمام؟ *",
-    acceptRules:"أؤكد أن المعلومات صحيحة وأنني قرأت القوانين وأوافق عليها. *",storageNote:"في الوضع التجريبي، تُحفظ الطلبات في هذا المتصفح فقط. راجع ملف README لربط قاعدة بيانات.",sendApplication:"إرسال الطلب <span>↗</span>",
-    examTitle:"اختبار <span>QCM</span>",examIntro:"اختر جواباً واحداً لكل سؤال. النتيجة تُحسب تلقائياً.",quizHeading:"اختبار مبادئ لعب الأدوار",quizHint:"تأكد من اختيار جواب لكل سؤال قبل التصحيح.",correctQuiz:"تصحيح الاختبار",
-    rulesTitle:"قوانين <span>السيرفر</span>",rulesIntro:"القوانين التالية نموذج أولي؛ عدّلها لتطابق قوانين مجتمعك الفعلية.",
-    rule1Title:"الاحترام المتبادل",rule1Text:"يُمنع السب أو التنمر أو المضايقة. تعامل مع جميع الأعضاء باحترام.",
-    rule2Title:"اللعب النظيف",rule2Text:"التزم بقواعد RP المعتمدة، ولا تستخدم الغش أو تستغل الأخطاء عمداً.",
-    rule3Title:"اتباع تعليمات الإدارة",rule3Text:"احترم قرارات المشرفين، وقدّم الاعتراضات عبر القنوات المخصصة بهدوء.",
-    rule4Title:"سرية المعلومات",rule4Text:"لا تنشر معلومات شخصية أو محادثات خاصة دون إذن أصحابها.",
-    rule5Title:"الالتزام بالرتب والمهام",rule5Text:"لا تنتحل رتبة أو صلاحية، واتبع نظام المسؤوليات الذي تعتمده الإدارة.",
-    adminTitle:"لوحة <span>الإدارة</span>",adminIntro:"عرض تجريبي للطلبات المحفوظة محلياً، أو تسجيل دخول قاعدة البيانات إذا تم إعداد Supabase.",
-    applicationsInbox:"صندوق الطلبات",refresh:"تحديث",clearDemo:"مسح التجريبي",adminWarning:"وضع تجريبي: البيانات هنا موجودة على هذا الجهاز فقط، ولا تعتبر لوحة إدارة آمنة أو خاصة.",
-    adminLoginTitle:"تسجيل دخول الإدارة (Supabase اختياري)",adminLoginText:"إذا أعددت Supabase وفعّلت الإعدادات في app.js، سجّل الدخول بحساب إداري. بدون ذلك، ستظهر الطلبات المحلية لهذا المتصفح فقط.",
-    login:"تسجيل الدخول",logout:"خروج",tableName:"الاسم",tableAge:"العمر",tableDate:"التاريخ",tableStatus:"الحالة",tableAction:"إجراء",noApplications:"لا توجد طلبات بعد.",
-    adminSecurityNote:"لا تضع كلمة مرور أو مفتاح service_role داخل ملفات الموقع. استعمل فقط المفتاح العام anon/publishable مع سياسات RLS صحيحة.",
-    footerText:"الانضباط • النزاهة • روح الفريق",submitted:"تم إرسال الطلب وحفظه في هذا المتصفح التجريبي.",submitFailed:"تعذر إرسال الطلب. حاول مرة أخرى.",requiredQuiz:"يرجى الإجابة عن جميع الأسئلة.",quizScore:"نتيجتك",quizPassed:"ممتاز! حققت درجة النجاح التجريبية.",quizRetry:"راجع القوانين وحاول مرة أخرى.",deleteConfirm:"هل تريد حذف هذا الطلب من القائمة المحلية؟",clearConfirm:"هل تريد حذف جميع الطلبات المحلية من هذا المتصفح؟",deleted:"تم حذف الطلب.",cleared:"تم مسح الطلبات المحلية.",noDb:"قاعدة البيانات غير مفعّلة. يتم عرض الطلبات المحلية فقط.",loginSuccess:"تم تسجيل الدخول.",loginFailed:"فشل تسجيل الدخول. تحقق من الإعدادات وبيانات الحساب.",dbLoaded:"تم تحميل الطلبات من قاعدة البيانات.",dbError:"تعذر الاتصال بقاعدة البيانات؛ تحقق من الإعدادات والسياسات.",logoutSuccess:"تم تسجيل الخروج.",statusNew:"جديد",view:"عرض",delete:"حذف",details:"تفاصيل الطلب",close:"إغلاق",submittedAt:"تاريخ الإرسال",nameMissing:"بدون اسم",confirmDeleteDb:"حذف هذا الطلب من قاعدة البيانات؟",deleteDbFailed:"لم يتم حذف الطلب. تحقق من الصلاحيات."
-  },
-  en: {
-    navHome:"Home",navApply:"Apply",navExam:"Exam",navRules:"Rules",navAdmin:"Admin",
-    eyebrow:"OFFICIAL RECRUITMENT PORTAL • APPLICATIONS OPEN",heroTitle:"Discipline starts<br><span>right here.</span>",
-    heroLead:"Join SSF Morocco RP and demonstrate your readiness through an application and knowledge check. Commitment, respect, and teamwork are at the heart of our mission.",
-    applyNow:"Apply now <span>↙</span>",readRules:"Read the rules",statOne:"Structured application",statTwo:"Auto-scored exam",statThree:"Online portal",heroFooter:"INTEGRITY • DUTY • RESPONSIBILITY",
-    overviewTitle:"Your gateway to the <span>division</span>",overviewText:"A clear process: review the requirements, submit your information, then complete the quiz.",
-    featureOneTitle:"Structured application",featureOneText:"Provide accurate information so the team can review your application.",learnMore:"Start application ↙",
-    featureTwoTitle:"Multiple-choice quiz",featureTwoText:"Answer the questions and receive your score immediately.",takeExam:"Take the quiz ↙",
-    featureThreeTitle:"Clear community rules",featureThreeText:"Learn the expectations for respect, fair play, and conduct in the server.",viewRules:"View rules ↙",
-    applicationTitle:"Join the <span>division</span>",applicationIntro:"Enter your information carefully. Fields marked * are required.",formTitle:"Official membership application",formSub:"Please follow the rules and provide accurate information.",
-    fullName:"In-server name *",discordName:"Discord username *",age:"Age *",timezone:"Timezone / availability *",experience:"Your RP experience *",motivation:"Why do you want to join? *",
-    acceptRules:"I confirm the information is accurate and I have read and agree to the rules. *",storageNote:"Demo mode stores applications in this browser only. See README to connect a database.",sendApplication:"Submit application <span>↗</span>",
-    examTitle:"Knowledge <span>check</span>",examIntro:"Choose one answer per question. Your score is calculated automatically.",quizHeading:"Roleplay fundamentals quiz",quizHint:"Answer every question before submitting.",correctQuiz:"Grade quiz",
-    rulesTitle:"Server <span>rules</span>",rulesIntro:"These are starter rules; edit them to match your actual community policy.",
-    rule1Title:"Mutual respect",rule1Text:"Harassment, bullying, and abusive language are not allowed. Treat every member respectfully.",
-    rule2Title:"Fair play",rule2Text:"Follow the server's RP rules. Do not cheat or deliberately exploit bugs.",
-    rule3Title:"Follow staff instructions",rule3Text:"Respect staff decisions and raise appeals calmly through the designated channels.",
-    rule4Title:"Privacy",rule4Text:"Do not share personal information or private conversations without permission.",
-    rule5Title:"Respect roles and duties",rule5Text:"Do not impersonate a rank or privilege. Follow the responsibility structure set by staff.",
-    adminTitle:"Administration <span>panel</span>",adminIntro:"A demo view of locally saved applications, or a database login if Supabase has been configured.",
-    applicationsInbox:"Application inbox",refresh:"Refresh",clearDemo:"Clear demo data",adminWarning:"Demo mode: this data exists only on this device and is not a secure or private admin panel.",
-    adminLoginTitle:"Admin login (optional Supabase)",adminLoginText:"If Supabase is configured in app.js, sign in with an admin account. Otherwise, only this browser's local applications are shown.",
-    login:"Sign in",logout:"Sign out",tableName:"Name",tableAge:"Age",tableDate:"Date",tableStatus:"Status",tableAction:"Action",noApplications:"No applications yet.",
-    adminSecurityNote:"Never place a password or service_role key in website files. Use only the public anon/publishable key with correct RLS policies.",
-    footerText:"DISCIPLINE • INTEGRITY • TEAMWORK",submitted:"Application saved in this browser's demo storage.",submitFailed:"Could not submit the application. Please try again.",requiredQuiz:"Please answer every question.",quizScore:"Your score",quizPassed:"Great work! You reached the demo pass mark.",quizRetry:"Review the rules and try again.",deleteConfirm:"Delete this application from the local list?",clearConfirm:"Delete all local applications from this browser?",deleted:"Application deleted.",cleared:"Local applications cleared.",noDb:"Database is not configured. Showing local applications only.",loginSuccess:"Signed in successfully.",loginFailed:"Sign-in failed. Check your settings and account.",dbLoaded:"Applications loaded from the database.",dbError:"Could not connect to the database. Check configuration and policies.",logoutSuccess:"Signed out.",statusNew:"New",view:"View",delete:"Delete",details:"Application details",close:"Close",submittedAt:"Submitted",nameMissing:"Unnamed",confirmDeleteDb:"Delete this database application?",deleteDbFailed:"Application was not deleted. Check permissions."
-  }
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const STORAGE = {apps:'ssfEliteApplications', attempts:'ssfEliteQuizAttempts', answers:'ssfEliteQuizAnswers'};
+let lang = localStorage.getItem('ssfEliteLanguage') || 'ar';
+let content = null, examData = null, questionIndex = 0, answers = {}, currentExam = null;
+const copy = {
+ ar:{navHome:'الرئيسية',navAbout:'عن الفرقة',navRanks:'الرتب',navApply:'الترشح',navExam:'QCM',navRules:'القوانين',navAdmin:'الإدارة التجريبية',heroTag:'بوابة المجتمع · باب الترشح مفتوح',heroTitle:'الانضباط يبدأ<br><span>من هنا.</span>',heroLead:'بوابة SSF Morocco RP تجمع الترشح والاختبارات والقوانين في تجربة واضحة، سريعة، واحترافية.',applyNow:'ابدأ الترشح ↙',readRules:'استكشف القوانين',stat1:'مسار ترشح منظم',stat2:'تصحيح فوري',stat3:'بوابة رقمية',heroFoot:'الجدية · النزاهة · روح الفريق',aboutTitle:'مهمتنا <span>ومبادئنا</span>',aboutLead:'مجتمع لعب أدوار افتراضي يضع الاحترام، التنظيم، والعمل الجماعي في المقدمة.',feature1Title:'تنظيم واضح',feature1Text:'خطوات مفهومة من قراءة الشروط إلى مراجعة طلب الترشح.',feature2Title:'تقييم معرفي',feature2Text:'أسئلة اختيار متعدد تساعد على فهم أساسيات لعب الأدوار.',feature3Title:'روح الفريق',feature3Text:'الاحترام والإنصاف والمسؤولية أساس التجربة داخل المجتمع.',ranksTitle:'هيكل <span>الرتب</span>',ranksLead:'نموذج قابل للتعديل حسب تنظيم مجتمعك.',applyTitle:'بوابة <span>الترشح</span>',applyLead:'أكمل المراحل بهدوء. يمكنك مراجعة بياناتك قبل حفظ الطلب التجريبي.',step1:'المعلومات',step2:'الخبرة',step3:'المراجعة',formHeading:'المعلومات الأساسية',formIntro:'املأ الحقول المطلوبة بمعلومات صحيحة.',fieldName:'اسمك داخل السيرفر *',fieldDiscord:'اسم Discord *',fieldAge:'العمر *',fieldAvailability:'أوقات النشاط *',next:'التالي ←',experienceHeading:'الخبرة والدافع',experienceIntro:'ساعد الإدارة على فهم تجربتك وأسباب رغبتك في الانضمام.',fieldExperience:'خبرتك في لعب الأدوار *',fieldMotivation:'لماذا تريد الانضمام؟ *',acceptRules:'أؤكد أن المعلومات صحيحة وأنني قرأت القوانين وأوافق عليها.',back:'→ السابق',review:'مراجعة الطلب ←',reviewHeading:'راجع طلبك',reviewIntro:'تأكد من صحة البيانات قبل الحفظ.',localNotice:'تنبيه: هذا نموذج تجريبي. سيُحفظ الطلب على هذا الجهاز فقط، ولن يصل للإدارة دون ربط Backend.',edit:'تعديل البيانات',saveApplication:'حفظ الطلب التجريبي ↗',saved:'تم حفظ الطلب في هذا المتصفح فقط. لم يتم إرساله إلى الإدارة.',invalid:'تحقق من الحقول المطلوبة قبل المتابعة.',experiencePlaceholder:'صف خبرتك باختصار...',motivationPlaceholder:'اكتب دوافعك...',examTitle:'اختبار <span>QCM PRO</span>',examLead:'اختر الإجابات، تنقل بين الأسئلة، ثم احصل على نتيجة وتصحيح توضيحي.',passMark:'عتبة النجاح',previous:'→ السابق',nextQuestion:'التالي ←',finishQuiz:'إنهاء وتصحيح',answered:'تمت الإجابة',unanswered:'لم تتم الإجابة',chooseAll:'أجب عن جميع الأسئلة قبل التصحيح.',passed:'ناجح في التدريب',failed:'حاول مرة أخرى',correct:'إجابات صحيحة',retry:'إعادة المحاولة',quizDisclaimer:'النتيجة محلية للتدريب فقط، وليست شهادة رسمية أو نتيجة محمية من الغش.',newsTitle:'آخر <span>المستجدات</span>',newsLead:'يمكن تعديل هذه الإعلانات من ملف بيانات الموقع.',rulesTitle:'قوانين <span>المجتمع</span>',rulesLead:'قواعد نموذجية يجب مراجعتها وتعديلها لتطابق مجتمعك.',faqTitle:'أسئلة <span>شائعة</span>',faqLead:'معلومات سريعة حول التقديم والاختبار والخصوصية.',dashboardTitle:'لوحة <span>تجريبية</span>',dashboardLead:'معاينة محلية للبيانات وإعدادات محتوى تجريبية، وليست لوحة إدارة آمنة.',demoMode:'وضع تجريبي',dashboardSubtitle:'مركز إدارة المحتوى',export:'تصدير الطلبات JSON',savedApplications:'طلبات محفوظة محلياً',quizAttempts:'محاولات الاختبار على هذا الجهاز',siteMode:'وضع الموقع',staticSite:'ثابت',refresh:'تحديث',clearDemo:'مسح بيانات هذا الجهاز',dashboardNotice:'لا توجد قاعدة بيانات مشتركة في النسخة الافتراضية. لا تُدخل معلومات حساسة، ولا تعتبر هذه الواجهة حماية إدارية. اربط خدمة خلفية مع سياسات وصول صحيحة للاستخدام الفعلي.',contentTools:'أدوات إعداد المحتوى',contentToolsText:'الرتب والأسئلة والقوانين والأخبار محفوظة في ملفات data/، وتُعدّل يدوياً ثم تُرفع إلى GitHub.',footerText:'الانضباط · النزاهة · روح الفريق',discord:'Discord (أضف الرابط)',independent:'مشروع Roleplay افتراضي مستقل، وليس جهة حكومية رسمية.',backTop:'↑ العودة للأعلى',reviewName:'الاسم',reviewDiscord:'Discord',reviewAge:'العمر',reviewAvailability:'أوقات النشاط',reviewExperience:'الخبرة',reviewMotivation:'الدافع',qOf:'سؤال',confirmClear:'هل تريد حذف بيانات الطلبات والمحاولات المحلية من هذا الجهاز؟',cleared:'تم حذف البيانات المحلية.',exportEmpty:'لا توجد طلبات محلية لتصديرها.',exportDone:'تم تجهيز ملف التصدير.'},
+ fr:{navHome:'Accueil',navAbout:'À propos',navRanks:'Grades',navApply:'Candidature',navExam:'QCM',navRules:'Règles',navAdmin:'Panneau démo',heroTag:'Portail communautaire · Candidatures ouvertes',heroTitle:'La discipline<br><span>commence ici.</span>',heroLead:'Le portail SSF Morocco RP réunit candidatures, tests et règles dans une expérience claire et professionnelle.',applyNow:'Commencer ↙',readRules:'Voir les règles',stat1:'Parcours structuré',stat2:'Correction immédiate',stat3:'Portail numérique',heroFoot:'Sérieux · Intégrité · Esprit d’équipe',aboutTitle:'Notre mission <span>et nos valeurs</span>',aboutLead:'Une communauté Roleplay virtuelle qui privilégie le respect, l’organisation et l’esprit d’équipe.',feature1Title:'Organisation claire',feature1Text:'Des étapes simples, des conditions à la relecture de la candidature.',feature2Title:'Évaluation des connaissances',feature2Text:'Des QCM pour comprendre les bases du Roleplay.',feature3Title:'Esprit d’équipe',feature3Text:'Le respect, l’équité et la responsabilité sont essentiels.',ranksTitle:'Structure des <span>grades</span>',ranksLead:'Modèle modifiable selon votre communauté.',applyTitle:'Portail de <span>candidature</span>',applyLead:'Suivez les étapes et relisez vos données avant l’enregistrement local.',step1:'Informations',step2:'Expérience',step3:'Vérification',formHeading:'Informations de base',formIntro:'Remplissez les champs obligatoires avec des informations exactes.',fieldName:'Nom en jeu *',fieldDiscord:'Nom Discord *',fieldAge:'Âge *',fieldAvailability:'Disponibilités *',next:'Suivant →',experienceHeading:'Expérience et motivation',experienceIntro:'Présentez votre expérience et vos motivations.',fieldExperience:'Expérience Roleplay *',fieldMotivation:'Pourquoi souhaitez-vous rejoindre ? *',acceptRules:'Je confirme l’exactitude des informations et accepte les règles.',back:'← Retour',review:'Vérifier →',reviewHeading:'Vérifiez votre candidature',reviewIntro:'Vérifiez les données avant de les enregistrer.',localNotice:'Démo : la candidature sera enregistrée sur cet appareil uniquement et ne sera pas transmise au staff sans backend.',edit:'Modifier',saveApplication:'Enregistrer la démo ↗',saved:'Candidature enregistrée dans ce navigateur uniquement. Rien n’a été envoyé au staff.',invalid:'Veuillez vérifier les champs obligatoires.',experiencePlaceholder:'Décrivez brièvement votre expérience…',motivationPlaceholder:'Expliquez votre motivation…',examTitle:'Test <span>QCM PRO</span>',examLead:'Répondez, naviguez entre les questions et consultez la correction.',passMark:'Seuil de réussite',previous:'← Précédent',nextQuestion:'Suivant →',finishQuiz:'Terminer et corriger',answered:'répondues',unanswered:'sans réponse',chooseAll:'Répondez à toutes les questions avant de corriger.',passed:'Réussi à l’entraînement',failed:'Réessayez',correct:'bonnes réponses',retry:'Recommencer',quizDisclaimer:'Résultat local d’entraînement uniquement, sans valeur officielle et non protégé contre la fraude.',newsTitle:'Dernières <span>actualités</span>',newsLead:'Modifiez ces annonces dans le fichier de données.',rulesTitle:'Règles de la <span>communauté</span>',rulesLead:'Exemples à adapter à votre communauté.',faqTitle:'Questions <span>fréquentes</span>',faqLead:'Candidature, test et confidentialité.',dashboardTitle:'Panneau <span>démo</span>',dashboardLead:'Aperçu local, ce n’est pas une administration sécurisée.',demoMode:'MODE DÉMO',dashboardSubtitle:'Centre de contenu',export:'Exporter JSON',savedApplications:'Candidatures locales',quizAttempts:'Tentatives sur cet appareil',siteMode:'Mode du site',staticSite:'Statique',refresh:'Actualiser',clearDemo:'Effacer les données locales',dashboardNotice:'Aucune base partagée n’est configurée. N’entrez pas de données sensibles. Un backend avec des règles d’accès est requis.',contentTools:'Outils de contenu',contentToolsText:'Grades, questions, règles et actualités se trouvent dans data/ et se modifient avant publication.',footerText:'Discipline · Intégrité · Esprit d’équipe',discord:'Discord (ajouter le lien)',independent:'Projet Roleplay indépendant, non affilié à une institution gouvernementale.',backTop:'↑ Haut de page',reviewName:'Nom',reviewDiscord:'Discord',reviewAge:'Âge',reviewAvailability:'Disponibilités',reviewExperience:'Expérience',reviewMotivation:'Motivation',qOf:'Question',confirmClear:'Supprimer les candidatures et tentatives locales de cet appareil ?',cleared:'Données locales supprimées.',exportEmpty:'Aucune candidature locale à exporter.',exportDone:'Fichier d’export prêt.'},
+ en:{navHome:'Home',navAbout:'About',navRanks:'Ranks',navApply:'Recruitment',navExam:'QCM',navRules:'Rules',navAdmin:'Demo dashboard',heroTag:'Community portal · Recruitment open',heroTitle:'Discipline<br><span>starts here.</span>',heroLead:'The SSF Morocco RP portal brings recruitment, assessments and community rules into one clear, polished experience.',applyNow:'Start application ↙',readRules:'Explore the rules',stat1:'Structured application',stat2:'Instant scoring',stat3:'Digital portal',heroFoot:'Seriousness · Integrity · Teamwork',aboutTitle:'Our mission <span>and values</span>',aboutLead:'A virtual Roleplay community built around respect, organization and teamwork.',feature1Title:'Clear structure',feature1Text:'Straightforward steps from requirements to application review.',feature2Title:'Knowledge check',feature2Text:'Multiple-choice questions covering Roleplay fundamentals.',feature3Title:'Team spirit',feature3Text:'Respect, fairness and responsibility shape the community.',ranksTitle:'Rank <span>structure</span>',ranksLead:'An editable example for your community.',applyTitle:'Recruitment <span>portal</span>',applyLead:'Complete each step and review your details before local saving.',step1:'Details',step2:'Experience',step3:'Review',formHeading:'Basic information',formIntro:'Complete required fields with accurate information.',fieldName:'In-game name *',fieldDiscord:'Discord name *',fieldAge:'Age *',fieldAvailability:'Availability *',next:'Next →',experienceHeading:'Experience and motivation',experienceIntro:'Tell the team about your experience and why you want to join.',fieldExperience:'Roleplay experience *',fieldMotivation:'Why do you want to join? *',acceptRules:'I confirm my information is accurate and I have read and accept the rules.',back:'← Back',review:'Review →',reviewHeading:'Review your application',reviewIntro:'Check your information before saving.',localNotice:'Demo only: this application is saved on this device and is not sent to staff without a backend.',edit:'Edit details',saveApplication:'Save demo application ↗',saved:'Saved in this browser only. Nothing was sent to staff.',invalid:'Please check the required fields.',experiencePlaceholder:'Briefly describe your experience…',motivationPlaceholder:'Tell us your motivation…',examTitle:'Assessment <span>QCM PRO</span>',examLead:'Answer questions, navigate between them, and review your results.',passMark:'Pass threshold',previous:'← Previous',nextQuestion:'Next →',finishQuiz:'Finish and score',answered:'answered',unanswered:'unanswered',chooseAll:'Answer every question before scoring.',passed:'Practice passed',failed:'Try again',correct:'correct answers',retry:'Try again',quizDisclaimer:'Local practice score only. It is not an official certificate and is not cheat-proof.',newsTitle:'Latest <span>updates</span>',newsLead:'Edit these announcements in the site data file.',rulesTitle:'Community <span>rules</span>',rulesLead:'Example rules to review and adapt for your community.',faqTitle:'Frequently <span>asked questions</span>',faqLead:'Quick information about recruitment, assessments and privacy.',dashboardTitle:'Demo <span>dashboard</span>',dashboardLead:'Local data preview only, not a secure administration panel.',demoMode:'DEMO MODE',dashboardSubtitle:'Content control room',export:'Export applications JSON',savedApplications:'Locally saved applications',quizAttempts:'Quiz attempts on this device',siteMode:'Site mode',staticSite:'Static',refresh:'Refresh',clearDemo:'Clear local data',dashboardNotice:'No shared database is configured by default. Do not enter sensitive data. Real use requires a backend with proper access policies.',contentTools:'Content configuration',contentToolsText:'Ranks, questions, rules and news live in data/ files. Edit them and publish the changes to GitHub.',footerText:'Discipline · Integrity · Teamwork',discord:'Discord (add link)',independent:'Independent virtual Roleplay project, not an official government body.',backTop:'↑ Back to top',reviewName:'Name',reviewDiscord:'Discord',reviewAge:'Age',reviewAvailability:'Availability',reviewExperience:'Experience',reviewMotivation:'Motivation',qOf:'Question',confirmClear:'Delete locally saved applications and quiz attempts from this device?',cleared:'Local data cleared.',exportEmpty:'No local applications to export.',exportDone:'Export file is ready.'}
 };
-
-const questions = {
- ar: [
-  {q:"إذا وقع خلاف مع عضو آخر أثناء اللعب، ما التصرف الأفضل؟",a:["أبدأ الجدال في كل القنوات","أحافظ على الهدوء وأتبع طريقة الشكاوى","أستعمل صلاحيات ليست لي","أنشر معلوماته الخاصة"],correct:1},
-  {q:"ماذا يعني الالتزام بقواعد RP؟",a:["تجاهل السيناريو عند عدم الإعجاب به","فرض الفوز دائماً","التصرف بما يناسب الدور وقواعد السيرفر","الخروج من اللعبة دون سبب"],correct:2},
-  {q:"إذا اكتشفت خطأً في السيرفر، ماذا تفعل؟",a:["أستغله للحصول على أفضلية","أبلغ الإدارة عنه","أخبر الجميع باستعماله","أتجاهله وأشجع الآخرين عليه"],correct:1},
-  {q:"هل يجوز نشر بيانات شخصية لعضو دون إذنه؟",a:["نعم، عند الغضب","نعم، في القنوات العامة فقط","لا، يجب احترام الخصوصية","فقط إذا كان عضواً جديداً"],correct:2},
-  {q:"ما أفضل طريقة للتعامل مع قرار إداري لا توافق عليه؟",a:["التهجم على المشرف","تقديم اعتراض باحترام عبر القناة المناسبة","إفساد اللعب على الآخرين","انتحال رتبة أعلى"],correct:1}
- ],
- en: [
-  {q:"What should you do during a disagreement with another member?",a:["Argue in every channel","Stay calm and use the report process","Use permissions you do not have","Share their private information"],correct:1},
-  {q:"What does following RP rules mean?",a:["Ignore a scene you dislike","Always force a win","Act consistently with your role and server rules","Leave the game without reason"],correct:2},
-  {q:"What should you do if you find a server bug?",a:["Exploit it for an advantage","Report it to staff","Tell everyone to use it","Ignore it and encourage others"],correct:1},
-  {q:"May you share another member's personal data without permission?",a:["Yes, when angry","Yes, only in public channels","No, respect privacy","Only if they are new"],correct:2},
-  {q:"How should you respond to a staff decision you disagree with?",a:["Attack the moderator","Appeal respectfully through the proper channel","Disrupt other players","Impersonate a higher rank"],correct:1}
- ]
-};
-
-let currentLang = localStorage.getItem("ssf-lang") || "ar";
-let supabaseClient = null;
-let signedInAdmin = false;
-const localKey = "ssf-morocco-rp-applications-v1";
-const $ = (s) => document.querySelector(s);
-const $$ = (s) => [...document.querySelectorAll(s)];
-
-function t(key){ return (translations[currentLang] && translations[currentLang][key]) || translations.ar[key] || key; }
-function escapeHtml(value){return String(value ?? "").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function toast(message){const el=$("#toast");el.textContent=message;el.classList.add("show");window.setTimeout(()=>el.classList.remove("show"),3000);}
-function setStatus(el,message,error=false){if(!el)return;el.textContent=message;el.classList.toggle("error",error);}
-function getLocalApplications(){try{return JSON.parse(localStorage.getItem(localKey)||"[]");}catch{return [];}}
-function setLocalApplications(items){localStorage.setItem(localKey,JSON.stringify(items));}
-function applyLanguage(){
-  document.documentElement.lang=currentLang;
-  document.documentElement.dir=currentLang==="ar"?"rtl":"ltr";
-  document.body.classList.toggle("lang-en",currentLang==="en");
-  $$("[data-i18n]").forEach(el=>{const key=el.dataset.i18n;if(translations[currentLang][key])el.innerHTML=translations[currentLang][key];});
-  $("#languageToggle").textContent=currentLang==="ar"?"EN / AR":"AR / EN";
-  $("#menuToggle").setAttribute("aria-label",currentLang==="ar"?"فتح القائمة":"Open menu");
-  $("#quizCount").textContent=currentLang==="ar"?"05 أسئلة":"05 QUESTIONS";
-  renderQuiz();
-  renderApplications();
-}
-function toggleLanguage(){currentLang=currentLang==="ar"?"en":"ar";localStorage.setItem("ssf-lang",currentLang);applyLanguage();}
-function renderQuiz(){
- const container=$("#quizQuestions");if(!container)return;
- container.innerHTML=questions[currentLang].map((item,index)=>`
-  <fieldset class="question"><h4><span>Q${String(index+1).padStart(2,"0")}</span>${escapeHtml(item.q)}</h4>
-   <div class="options">${item.a.map((answer,choice)=>`<label class="option"><input type="radio" name="q${index}" value="${choice}" required><span>${escapeHtml(answer)}</span></label>`).join("")}</div>
-  </fieldset>`).join("");
- $("#quizResult").hidden=true;
-}
-function renderApplications(items=getLocalApplications()){
- const tbody=$("#applicationsTable");if(!tbody)return;
- $("#applicationCount").textContent=String(items.length);
- if(!items.length){tbody.innerHTML=`<tr><td colspan="6" class="empty-table">${escapeHtml(t("noApplications"))}</td></tr>`;return;}
- tbody.innerHTML=items.slice().reverse().map(item=>`<tr>
-  <td>${escapeHtml(item.full_name||item.fullName||t("nameMissing"))}</td>
-  <td>${escapeHtml(item.discord_name||item.discord||"—")}</td>
-  <td>${escapeHtml(item.age??"—")}</td>
-  <td>${escapeHtml(formatDate(item.created_at||item.createdAt))}</td>
-  <td><span class="status-pill">${escapeHtml(t("statusNew"))}</span></td>
-  <td><button class="row-action" data-view="${escapeHtml(item.id)}">${escapeHtml(t("view"))}</button> <button class="row-action" data-delete="${escapeHtml(item.id)}">${escapeHtml(t("delete"))}</button></td>
- </tr>`).join("");
- tbody.querySelectorAll("[data-view]").forEach(btn=>btn.addEventListener("click",()=>viewApplication(btn.dataset.view,items)));
- tbody.querySelectorAll("[data-delete]").forEach(btn=>btn.addEventListener("click",()=>deleteApplication(btn.dataset.delete,items)));
-}
-function formatDate(date){if(!date)return "—";const d=new Date(date);return Number.isNaN(d.getTime())?"—":d.toLocaleString(currentLang==="ar"?"ar-MA":"en-GB");}
-function viewApplication(id,items){
- const item=items.find(x=>String(x.id)===String(id));if(!item)return;
- const text=`${t("details")}\n${t("fullName")}: ${item.full_name||item.fullName||"—"}\nDiscord: ${item.discord_name||item.discord||"—"}\n${t("age")}: ${item.age||"—"}\n${t("timezone")}: ${item.availability||"—"}\n${t("experience")}: ${item.experience||"—"}\n${t("motivation")}: ${item.motivation||"—"}\n${t("submittedAt")}: ${formatDate(item.created_at||item.createdAt)}`;
- alert(text);
-}
-async function deleteApplication(id,items){
- if(!confirm(t(supabaseClient&&signedInAdmin?"confirmDeleteDb":"deleteConfirm")))return;
- if(supabaseClient&&signedInAdmin&&items.some(x=>String(x.id)===String(id)&&x.created_at)){
-  const {error}=await supabaseClient.from(TABLE_NAME).delete().eq("id",id);
-  if(error){toast(t("deleteDbFailed"));return;} await refreshApplications();return;
- }
- setLocalApplications(getLocalApplications().filter(x=>String(x.id)!==String(id)));
- renderApplications();toast(t("deleted"));
-}
-async function refreshApplications(){
- if(supabaseClient&&signedInAdmin){
-  const {data,error}=await supabaseClient.from(TABLE_NAME).select("*").order("created_at",{ascending:false}).limit(200);
-  if(error){setStatus($("#adminStatus"),t("dbError"),true);renderApplications();return;}
-  renderApplications(data||[]);setStatus($("#adminStatus"),t("dbLoaded"));return;
- }
- renderApplications();setStatus($("#adminStatus"),t("noDb"));
-}
-async function submitApplication(event){
- event.preventDefault();const form=event.currentTarget;
- if(!form.reportValidity())return;
- const fd=new FormData(form);
- const item={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),fullName:String(fd.get("fullName")).trim(),discord:String(fd.get("discord")).trim(),age:Number(fd.get("age")),availability:String(fd.get("availability")).trim(),experience:String(fd.get("experience")).trim(),motivation:String(fd.get("motivation")).trim(),createdAt:new Date().toISOString()};
- // Public submissions may be inserted into Supabase only if you explicitly configure URL/key and safe RLS policies.
- if(supabaseClient){
-  const payload={full_name:item.fullName,discord_name:item.discord,age:item.age,availability:item.availability,experience:item.experience,motivation:item.motivation};
-  const {error}=await supabaseClient.from(TABLE_NAME).insert(payload);
-  if(error){setStatus($("#applicationStatus"),t("submitFailed")+" "+error.message,true);return;}
- } else {
-  const items=getLocalApplications();items.push(item);setLocalApplications(items);
- }
- setStatus($("#applicationStatus"),t("submitted"));toast(t("submitted"));form.reset();await refreshApplications();
-}
-function gradeQuiz(event){
- event.preventDefault();const form=event.currentTarget;
- const data=new FormData(form);let score=0;
- for(let i=0;i<questions[currentLang].length;i++){if(data.get("q"+i)===null){$("#quizResult").hidden=false;$("#quizResult").innerHTML=`<p>${escapeHtml(t("requiredQuiz"))}</p>`;return;}if(Number(data.get("q"+i))===questions[currentLang][i].correct)score++;}
- const total=questions[currentLang].length;const percent=Math.round(score/total*100);const pass=percent>=80;
- const result=$("#quizResult");result.hidden=false;result.innerHTML=`<strong>${escapeHtml(t("quizScore"))}: ${score}/${total} — ${percent}%</strong><p>${escapeHtml(pass?t("quizPassed"):t("quizRetry"))}</p>`;
- result.style.borderColor=pass?"#315b42":"#634b2b";result.style.background=pass?"#102017":"#211a10";
-}
-async function loginAdmin(){
- if(!supabaseClient){setStatus($("#adminStatus"),t("noDb"),true);return;}
- const email=$("#adminEmail").value.trim(),password=$("#adminPassword").value;
- if(!email||!password){setStatus($("#adminStatus"),currentLang==="ar"?"أدخل البريد وكلمة المرور.":"Enter email and password.",true);return;}
- const {error}=await supabaseClient.auth.signInWithPassword({email,password});
- if(error){setStatus($("#adminStatus"),t("loginFailed"),true);return;}
- signedInAdmin=true;$("#adminLogoutButton").hidden=false;setStatus($("#adminStatus"),t("loginSuccess"));await refreshApplications();
-}
-async function logoutAdmin(){
- if(supabaseClient)await supabaseClient.auth.signOut();
- signedInAdmin=false;$("#adminLogoutButton").hidden=true;setStatus($("#adminStatus"),t("logoutSuccess"));renderApplications();
-}
-function init(){
- if(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase){supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}
- $("#languageToggle").addEventListener("click",toggleLanguage);
- $("#menuToggle").addEventListener("click",()=>$("#mainNav").classList.toggle("open"));
- $$("#mainNav a").forEach(a=>a.addEventListener("click",()=>$("#mainNav").classList.remove("open")));
- $("#applicationForm").addEventListener("submit",submitApplication);
- $("#quizForm").addEventListener("submit",gradeQuiz);
- $("#refreshApplications").addEventListener("click",refreshApplications);
- $("#clearApplications").addEventListener("click",()=>{if(!confirm(t("clearConfirm")))return;setLocalApplications([]);renderApplications();toast(t("cleared"));});
- $("#adminLoginButton").addEventListener("click",loginAdmin);
- $("#adminLogoutButton").addEventListener("click",logoutAdmin);
- applyLanguage();refreshApplications();
-}
-document.addEventListener("DOMContentLoaded",init);
+function t(key){return (copy[lang]&&copy[lang][key])||copy.en[key]||key}function tr(obj){return obj?.[lang]||obj?.en||obj?.ar||''}function safeGet(key,fallback=[]){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}function safeSet(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch{toast('Storage unavailable');return false}}
+function toast(message){const el=$('#toast');el.textContent=message;el.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('show'),3200)}
+function setLanguage(next){lang=next;localStorage.setItem('ssfEliteLanguage',lang);document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';$('#language').value=lang;$$('[data-t]').forEach(el=>{const val=t(el.dataset.t);if(val.includes('<span>')||val.includes('<br>'))el.innerHTML=val;else el.textContent=val});$$('[data-placeholder]').forEach(el=>el.placeholder=t(el.dataset.placeholder));renderDynamic();if(currentExam)renderQuestion();updateDashboard()}
+function renderDynamic(){if(!content||!examData)return;$('#rankGrid').innerHTML=content.ranks.map((r,i)=>`<article class="rank-card"><div class="rank-top"><span class="rank-symbol">${escapeHtml(r.symbol)}</span><span class="rank-level">${escapeHtml(r.level)}</span></div><h3>${escapeHtml(tr(r.title))}</h3><p class="rank-sub">${escapeHtml(tr(r.subtitle))}</p><p>${escapeHtml(tr(r.description))}</p></article>`).join('');$('#newsGrid').innerHTML=content.news.map(n=>`<article class="news-card"><div class="news-art">SSF</div><div><time>${escapeHtml(n.tag)} · ${escapeHtml(n.date)}</time><h3>${escapeHtml(tr(n.title))}</h3><p>${escapeHtml(tr(n.text))}</p></div></article>`).join('');$('#rulesList').innerHTML=content.rules.map((r,i)=>`<article class="rule"><span class="rule-num">${String(i+1).padStart(2,'0')}</span><div><h3>${escapeHtml(tr(r.title))}</h3><p>${escapeHtml(tr(r.text))}</p></div><b>${escapeHtml(r.code)}</b></article>`).join('');$('#faqList').innerHTML=content.faq.map(f=>`<details><summary>${escapeHtml(tr(f.q))}</summary><p>${escapeHtml(tr(f.a))}</p></details>`).join('');const url=(content.discordUrl||'').trim();const link=$('#discordLink');if(/^https:\/\//i.test(url)){link.href=url;link.hidden=false;link.textContent='Discord ↗'}else{link.href='#';link.hidden=false;link.textContent=t('discord')}currentExam=examData.exams[0];$('#quizTitle').textContent=tr(currentExam.title);$('#quizDescription').textContent=tr(currentExam.description);if(!Object.keys(answers).length)answers={};renderQuestion()}
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function validateStep(step){const form=$('#applicationForm');const fields=$$('.form-step[data-step="'+step+'"] input, .form-step[data-step="'+step+'"] textarea',form);for(const field of fields){if(!field.checkValidity()){field.reportValidity();return false}}return true}
+function goStep(step){if(step>1&&!validateStep(step-1)){toast(t('invalid'));return}$$('.form-step').forEach(el=>el.classList.toggle('active',Number(el.dataset.step)===step));$$('#applySteps>span').forEach((el,i)=>{el.classList.toggle('active',i+1===step);el.classList.toggle('complete',i+1<step)});$('#stepLabel').textContent=`STEP 0${step} / 03`;$('#progressBar').style.width=`${step/3*100}%`;if(step===3)renderReview();$('#applicationStatus').textContent='';$('#applicationStatus').classList.remove('error')}
+function renderReview(){const fd=new FormData($('#applicationForm'));const items=[['reviewName','fullName'],['reviewDiscord','discord'],['reviewAge','age'],['reviewAvailability','availability'],['reviewExperience','experience'],['reviewMotivation','motivation']];$('#reviewGrid').innerHTML=items.map(([label,key])=>`<div class="review-item"><small>${escapeHtml(t(label))}</small><b>${escapeHtml(fd.get(key))}</b></div>`).join('')}
+function readApplications(){return safeGet(STORAGE.apps,[])}function updateDashboard(){$('#applicationCount').textContent=readApplications().length;$('#quizAttempts').textContent=safeGet(STORAGE.attempts,[]).length}
+function renderQuestion(){if(!currentExam)return;const q=currentExam.questions[questionIndex];$('#questionProgress').textContent=`${questionIndex+1} / ${currentExam.questions.length}`;$('#quizPosition').textContent=`${String(questionIndex+1).padStart(2,'0')} / ${String(currentExam.questions.length).padStart(2,'0')}`;$('#answeredCount').textContent=`${Object.keys(answers).filter(k=>answers[k]!==undefined).length} ${t('answered')}`;$('#quizProgressBar').style.width=`${(questionIndex+1)/currentExam.questions.length*100}%`;$('#quizContent').innerHTML=`<div class="question-meta">${escapeHtml(currentExam.id.toUpperCase())} · ${escapeHtml(t('qOf'))} ${questionIndex+1}</div><h4 class="question-title">${escapeHtml(tr(q.text))}</h4><div class="answer-list">${q.answers[lang].map((a,i)=>`<label class="answer-option ${answers[q.id]===i?'selected':''}"><input type="radio" name="${escapeHtml(q.id)}" value="${i}" ${answers[q.id]===i?'checked':''}><span>${escapeHtml(a)}</span></label>`).join('')}</div>`;$$('.answer-option input').forEach(input=>input.addEventListener('change',()=>{answers[q.id]=Number(input.value);safeSet(STORAGE.answers,answers);renderQuestion()}));$('#prevQuestion').disabled=questionIndex===0;$('#nextQuestion').hidden=questionIndex===currentExam.questions.length-1;$('#submitQuiz').hidden=questionIndex!==currentExam.questions.length-1}
+function submitQuiz(){const missing=currentExam.questions.filter(q=>answers[q.id]===undefined);if(missing.length){toast(t('chooseAll'));questionIndex=currentExam.questions.findIndex(q=>answers[q.id]===undefined);renderQuestion();return}const correct=currentExam.questions.filter(q=>answers[q.id]===q.correct).length;const score=Math.round(correct/currentExam.questions.length*100);const pass=Number($('#passMark').value||examData.passMark||70);const attempts=safeGet(STORAGE.attempts,[]);attempts.push({examId:currentExam.id,score,date:new Date().toISOString()});safeSet(STORAGE.attempts,attempts);$('#quizResult').hidden=false;$('#quizResult').innerHTML=`<div class="result-score"><div class="score-ring" style="--score:${score}%"><b>${score}%</b></div><div class="result-details"><h3>${score>=pass?escapeHtml(t('passed')):escapeHtml(t('failed'))}</h3><p>${correct} / ${currentExam.questions.length} ${escapeHtml(t('correct'))} · ${escapeHtml(t('passMark'))}: ${pass}%</p><button type="button" class="btn ghost" id="retryQuiz">${escapeHtml(t('retry'))}</button></div></div><div class="correction">${currentExam.questions.map((q,i)=>{const good=answers[q.id]===q.correct;return `<article class="correction-item ${good?'good':'bad'}"><b>${i+1}. ${escapeHtml(tr(q.text))}</b><p>${good?'✓':'✕'} ${escapeHtml(q.answers[lang][q.correct])}</p><p>${escapeHtml(tr(q.explanation))}</p></article>`}).join('')}</div>`;$('#retryQuiz').addEventListener('click',resetQuiz);$('#quizResult').scrollIntoView({behavior:'smooth',block:'start'});updateDashboard()}
+function resetQuiz(){questionIndex=0;answers={};safeSet(STORAGE.answers,answers);$('#quizResult').hidden=true;renderQuestion()}
+async function init(){try{const [c,e]=await Promise.all([fetch('data/content.json').then(r=>{if(!r.ok)throw Error('content');return r.json()}),fetch('data/exams.json').then(r=>{if(!r.ok)throw Error('exam');return r.json()})]);content=c;examData=e;setLanguage(lang);answers=safeGet(STORAGE.answers,{});renderQuestion()}catch(err){console.error('Could not load site data',err);toast('Unable to load data files. Run via a local web server or GitHub Pages.')}finally{setTimeout(()=>$('#loader').classList.add('done'),350)}updateDashboard()}
+$('#language').addEventListener('change',e=>setLanguage(e.target.value));$('#menuToggle').addEventListener('click',()=>{const nav=$('#nav');const open=nav.classList.toggle('open');$('#menuToggle').setAttribute('aria-expanded',String(open))});$$('#nav a').forEach(a=>a.addEventListener('click',()=>{$('#nav').classList.remove('open');$('#menuToggle').setAttribute('aria-expanded','false')}));$$('[data-next]').forEach(b=>b.addEventListener('click',()=>goStep(Number($('.form-step.active').dataset.step)+1)));$$('[data-prev]').forEach(b=>b.addEventListener('click',()=>goStep(Number($('.form-step.active').dataset.step)-1)));
+$('#applicationForm').addEventListener('submit',e=>{e.preventDefault();if(!validateStep(2))return;const fd=new FormData(e.currentTarget);const app={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),fullName:fd.get('fullName').trim(),discord:fd.get('discord').trim(),age:Number(fd.get('age')),availability:fd.get('availability').trim(),experience:fd.get('experience').trim(),motivation:fd.get('motivation').trim(),createdAt:new Date().toISOString(),status:'demo'};if(!app.fullName||!app.discord||app.age<13||!app.acceptRules&&fd.get('acceptRules')!=='on'){toast(t('invalid'));return}const all=readApplications();all.push(app);if(safeSet(STORAGE.apps,all)){$('#applicationStatus').textContent=t('saved');$('#applicationStatus').classList.remove('error');updateDashboard();toast(t('saved'));e.currentTarget.reset();goStep(1)}});
+$('#prevQuestion').addEventListener('click',()=>{questionIndex=Math.max(0,questionIndex-1);renderQuestion()});$('#nextQuestion').addEventListener('click',()=>{questionIndex=Math.min(currentExam.questions.length-1,questionIndex+1);renderQuestion()});$('#submitQuiz').addEventListener('click',submitQuiz);$('#refreshDashboard').addEventListener('click',()=>{updateDashboard();toast(t('refresh'))});$('#clearDemo').addEventListener('click',()=>{if(confirm(t('confirmClear'))){Object.values(STORAGE).forEach(k=>localStorage.removeItem(k));answers={};resetQuiz();updateDashboard();toast(t('cleared'))}});$('#exportData').addEventListener('click',()=>{const rows=readApplications();if(!rows.length){toast(t('exportEmpty'));return}const blob=new Blob([JSON.stringify(rows,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ssf-demo-applications.json';a.click();URL.revokeObjectURL(url);toast(t('exportDone'))});init();
