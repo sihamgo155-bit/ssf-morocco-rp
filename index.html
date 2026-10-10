@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101010">
+  <meta name="description" content="SSF Morocco RP — منصة التقديم والاختبارات والقوانين">
+  <title>SSF Morocco RP | Official Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="top-line"></div>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="SSF Morocco RP home">
+      <span class="brand-mark"><span class="star">✦</span></span>
+      <span><strong>SSF <em>MOROCCO</em></strong><small>ROLEPLAY DIVISION</small></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+    <nav id="mainNav">
+      <a href="#home" data-i18n="navHome">الرئيسية</a>
+      <a href="#apply" data-i18n="navApply">التقديم</a>
+      <a href="#exam" data-i18n="navExam">الامتحان</a>
+      <a href="#rules" data-i18n="navRules">القوانين</a>
+      <a href="#admin" data-i18n="navAdmin">الإدارة</a>
+    </nav>
+    <button class="language-btn" id="languageToggle" type="button">EN / AR</button>
+  </header>
+
+  <main>
+    <section class="hero section" id="home">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot"></span><span data-i18n="eyebrow">بوابة التوظيف الرسمية • الموسم مفتوح</span></div>
+        <h1 data-i18n="heroTitle">الانضباط يبدأ<br><span>من هنا.</span></h1>
+        <p class="hero-lead" data-i18n="heroLead">انضم إلى SSF Morocco RP، وأثبت جاهزيتك عبر طلب الانضمام والاختبار المعرفي. الالتزام، الاحترام والعمل الجماعي أساس مهمتنا.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#apply" data-i18n="applyNow">قدّم طلبك الآن <span>↙</span></a>
+          <a class="btn btn-ghost" href="#rules" data-i18n="readRules">اقرأ القوانين</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>01</strong><span data-i18n="statOne">طلب منظم</span></div>
+          <div><strong>QCM</strong><span data-i18n="statTwo">اختبار تلقائي</span></div>
+          <div><strong>24/7</strong><span data-i18n="statThree">بوابة إلكترونية</span></div>
+        </div>
+      </div>
+      <div class="hero-art" aria-label="SSF emblem illustration">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="crest">
+          <div class="crest-top">SSF</div>
+          <div class="crest-star">✦</div>
+          <div class="crest-bottom">MOROCCO</div>
+        </div>
+        <div class="floating-tag tag-top"><span class="tag-dot"></span> MOROCCO RP</div>
+        <div class="floating-tag tag-bottom"><span class="mini-flag"><i></i></span> SERVICE • HONOUR • RESPECT</div>
+        <div class="red-glow"></div>
+      </div>
+      <div class="hero-footer"><span>SSF / PORTAL 01</span><span data-i18n="heroFooter">الجدية • النزاهة • المسؤولية</span><span>EST. 2026</span></div>
+    </section>
+
+    <section class="section intro-section">
+      <div class="section-heading"><div><span class="section-kicker">01 / OVERVIEW</span><h2 data-i18n="overviewTitle">بوابتك نحو <span>الفرقة</span></h2></div><p data-i18n="overviewText">كل خطوة واضحة: اقرأ الشروط، أرسل المعلومات المطلوبة، ثم اجتز الاختبار.</p></div>
+      <div class="feature-grid">
+        <article class="feature-card"><span class="feature-icon">01</span><h3 data-i18n="featureOneTitle">تقديم منظم</h3><p data-i18n="featureOneText">املأ الاستمارة بمعلومات صحيحة وواضحة حتى تتمكن الإدارة من مراجعة طلبك.</p><a href="#apply" data-i18n="learnMore">ابدأ التقديم ↙</a></article>
+        <article class="feature-card featured"><span class="feature-icon">02</span><h3 data-i18n="featureTwoTitle">اختبار QCM</h3><p data-i18n="featureTwoText">أجب عن أسئلة الاختيار المتعدد واحصل على نتيجتك مباشرة بعد الإرسال.</p><a href="#exam" data-i18n="takeExam">ابدأ الاختبار ↙</a></article>
+        <article class="feature-card"><span class="feature-icon">03</span><h3 data-i18n="featureThreeTitle">قوانين واضحة</h3><p data-i18n="featureThreeText">تعرف على قواعد الاحترام، اللعب النظيف، والالتزام داخل السيرفر.</p><a href="#rules" data-i18n="viewRules">عرض القوانين ↙</a></article>
+      </div>
+    </section>
+
+    <section class="section apply-section" id="apply">
+      <div class="section-heading"><div><span class="section-kicker">02 / APPLICATION</span><h2 data-i18n="applicationTitle">استمارة <span>الانضمام</span></h2></div><p data-i18n="applicationIntro">أدخل معلوماتك بدقة. الحقول التي تحمل علامة * مطلوبة.</p></div>
+      <form id="applicationForm" class="panel form-grid">
+        <div class="form-intro"><div class="form-badge">SSF / JOIN</div><h3 data-i18n="formTitle">طلب الانتساب الرسمي</h3><p data-i18n="formSub">يرجى احترام القوانين وتقديم معلومات صحيحة.</p></div>
+        <label><span data-i18n="fullName">الاسم داخل السيرفر *</span><input name="fullName" required minlength="2" maxlength="60" placeholder="مثال: Anas_RP"></label>
+        <label><span data-i18n="discordName">اسم Discord *</span><input name="discord" required minlength="2" maxlength="60" placeholder="username"></label>
+        <label><span data-i18n="age">العمر *</span><input name="age" type="number" min="13" max="99" required placeholder="18"></label>
+        <label><span data-i18n="timezone">التوقيت / أوقات النشاط *</span><input name="availability" required maxlength="100" placeholder="مثال: 18:00 - 22:00"></label>
+        <label class="full"><span data-i18n="experience">خبرتك في RP *</span><textarea name="experience" required minlength="10" maxlength="1000" rows="3" placeholder="..."></textarea></label>
+        <label class="full"><span data-i18n="motivation">لماذا تريد الانضمام؟ *</span><textarea name="motivation" required minlength="10" maxlength="1000" rows="3" placeholder="..."></textarea></label>
+        <label class="full check-label"><input type="checkbox" name="acceptRules" required><span data-i18n="acceptRules">أؤكد أن المعلومات صحيحة وأنني قرأت القوانين وأوافق عليها. *</span></label>
+        <div class="full form-bottom"><p class="small-note" data-i18n="storageNote">في الوضع التجريبي، تُحفظ الطلبات في هذا المتصفح فقط. راجع ملف README لربط قاعدة بيانات.</p><button class="btn btn-primary" type="submit" data-i18n="sendApplication">إرسال الطلب <span>↗</span></button></div>
+        <div class="full status-message" id="applicationStatus" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <section class="section exam-section" id="exam">
+      <div class="section-heading"><div><span class="section-kicker">03 / KNOWLEDGE CHECK</span><h2 data-i18n="examTitle">اختبار <span>QCM</span></h2></div><p data-i18n="examIntro">اختر جواباً واحداً لكل سؤال. النتيجة تُحسب تلقائياً.</p></div>
+      <form id="quizForm" class="panel quiz-panel">
+        <div class="quiz-top"><div><span class="section-kicker">BASIC ASSESSMENT</span><h3 data-i18n="quizHeading">اختبار مبادئ لعب الأدوار</h3></div><span class="quiz-count" id="quizCount">05 QUESTIONS</span></div>
+        <div id="quizQuestions"></div>
+        <div class="quiz-footer"><p data-i18n="quizHint">تأكد من اختيار جواب لكل سؤال قبل التصحيح.</p><button class="btn btn-primary" type="submit" data-i18n="correctQuiz">تصحيح الاختبار</button></div>
+        <div class="quiz-result" id="quizResult" aria-live="polite" hidden></div>
+      </form>
+    </section>
+
+    <section class="section rules-section" id="rules">
+      <div class="section-heading"><div><span class="section-kicker">04 / CODE OF CONDUCT</span><h2 data-i18n="rulesTitle">قوانين <span>السيرفر</span></h2></div><p data-i18n="rulesIntro">القوانين التالية نموذج أولي؛ عدّلها لتطابق قوانين مجتمعك الفعلية.</p></div>
+      <div class="rules-list">
+        <article class="rule"><span>01</span><div><h3 data-i18n="rule1Title">الاحترام المتبادل</h3><p data-i18n="rule1Text">يُمنع السب أو التنمر أو المضايقة. تعامل مع جميع الأعضاء باحترام.</p></div><b>RESPECT</b></article>
+        <article class="rule"><span>02</span><div><h3 data-i18n="rule2Title">اللعب النظيف</h3><p data-i18n="rule2Text">التزم بقواعد RP المعتمدة، ولا تستخدم الغش أو تستغل الأخطاء عمداً.</p></div><b>FAIR PLAY</b></article>
+        <article class="rule"><span>03</span><div><h3 data-i18n="rule3Title">اتباع تعليمات الإدارة</h3><p data-i18n="rule3Text">احترم قرارات المشرفين، وقدّم الاعتراضات عبر القنوات المخصصة بهدوء.</p></div><b>DISCIPLINE</b></article>
+        <article class="rule"><span>04</span><div><h3 data-i18n="rule4Title">سرية المعلومات</h3><p data-i18n="rule4Text">لا تنشر معلومات شخصية أو محادثات خاصة دون إذن أصحابها.</p></div><b>PRIVACY</b></article>
+        <article class="rule"><span>05</span><div><h3 data-i18n="rule5Title">الالتزام بالرتب والمهام</h3><p data-i18n="rule5Text">لا تنتحل رتبة أو صلاحية، واتبع نظام المسؤوليات الذي تعتمده الإدارة.</p></div><b>RESPONSIBILITY</b></article>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="admin">
+      <div class="section-heading"><div><span class="section-kicker">05 / ADMINISTRATION</span><h2 data-i18n="adminTitle">لوحة <span>الإدارة</span></h2></div><p data-i18n="adminIntro">عرض تجريبي للطلبات المحفوظة محلياً، أو تسجيل دخول قاعدة البيانات إذا تم إعداد Supabase.</p></div>
+      <div class="panel admin-panel">
+        <div class="admin-toolbar"><div><span class="admin-indicator"></span><strong data-i18n="applicationsInbox">صندوق الطلبات</strong><span class="muted" id="applicationCount">0</span></div><div class="admin-actions"><button class="btn btn-small btn-ghost" id="refreshApplications" type="button" data-i18n="refresh">تحديث</button><button class="btn btn-small btn-danger-outline" id="clearApplications" type="button" data-i18n="clearDemo">مسح التجريبي</button></div></div>
+        <div class="demo-warning" data-i18n="adminWarning">وضع تجريبي: البيانات هنا موجودة على هذا الجهاز فقط، ولا تعتبر لوحة إدارة آمنة أو خاصة.</div>
+        <div id="adminLogin" class="admin-login">
+          <h3 data-i18n="adminLoginTitle">تسجيل دخول الإدارة (Supabase اختياري)</h3>
+          <p data-i18n="adminLoginText">إذا أعددت Supabase وفعّلت الإعدادات في app.js، سجّل الدخول بحساب إداري. بدون ذلك، ستظهر الطلبات المحلية لهذا المتصفح فقط.</p>
+          <div class="login-fields"><input id="adminEmail" type="email" autocomplete="username" placeholder="admin@example.com"><input id="adminPassword" type="password" autocomplete="current-password" placeholder="Password"><button class="btn btn-primary" id="adminLoginButton" type="button" data-i18n="login">تسجيل الدخول</button><button class="btn btn-ghost btn-small" id="adminLogoutButton" type="button" hidden data-i18n="logout">خروج</button></div>
+          <p class="status-message" id="adminStatus" aria-live="polite"></p>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th data-i18n="tableName">الاسم</th><th>Discord</th><th data-i18n="tableAge">العمر</th><th data-i18n="tableDate">التاريخ</th><th data-i18n="tableStatus">الحالة</th><th data-i18n="tableAction">إجراء</th></tr></thead><tbody id="applicationsTable"><tr><td colspan="6" class="empty-table" data-i18n="noApplications">لا توجد طلبات بعد.</td></tr></tbody></table></div>
+        <p class="small-note" data-i18n="adminSecurityNote">لا تضع كلمة مرور أو مفتاح service_role داخل ملفات الموقع. استعمل فقط المفتاح العام anon/publishable مع سياسات RLS صحيحة.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="footer-brand">SSF <span>MOROCCO RP</span></div><p data-i18n="footerText">الانضباط • النزاهة • روح الفريق</p><span>© 2026 SSF MOROCCO RP — COMMUNITY PROJECT</span></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+</body>
+</html>
